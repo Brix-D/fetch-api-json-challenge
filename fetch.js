@@ -34,7 +34,6 @@ function processData(result) {
 	}
 	// для демонтрационных целей: анимация изчезает только спустя 3 секунды после прогрузки контента, иначе слишком быстро
 	let timeOutId = setTimeout(stopPreloadAnimation, 3000);
-	//stopPreloadAnimation();
 }
 // создать дом структуру и вставить данные json, затем отрисовать на странице
 function renderPost(data, container) {
