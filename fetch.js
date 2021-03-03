@@ -28,10 +28,14 @@ function loadPosts(urlLink) {
 }
 // обработать массив данных
 function processData(result) {
-	let container = document.querySelector('.wrapper');
-	for (let item of result) {
-		renderPost(item, container);
-	}
+	let container = document.querySelector('.row');
+	//for (let item of result) {
+		//renderPost(item, container);
+	//}
+	result.map(function (item) {
+		item["photo"] = "https://via.placeholder.com/300x300.jpg";
+		//renderPost(item, container);
+	});
 	// для демонтрационных целей: анимация изчезает только спустя 3 секунды после прогрузки контента, иначе слишком быстро
 	let timeOutId = setTimeout(stopPreloadAnimation, 3000);
 }
