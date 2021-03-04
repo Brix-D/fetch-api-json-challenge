@@ -8,12 +8,12 @@ window.addEventListener('load', function(event) {
 // начать анимацию загрузки
 function startPreloadAnimation() {
 	let htmlPreloader = "<div id=\"cube-loader\"><div class=\"caption\"><div class=\"cube-loader\"><div class=\"cube loader-1\"></div><div class=\"cube loader-2\"></div><div class=\"cube loader-4\"></div><div class=\"cube loader-3\"></div></div></div></div>";
-let container = document.querySelector('.wrapper');
+let container = document.querySelector('.container-lg');
 container.insertAdjacentHTML('afterbegin', htmlPreloader);
 }
 // завершить анимацию загрузки
 function stopPreloadAnimation() {
-	let container = document.querySelector('.wrapper');
+	let container = document.querySelector('.container-lg');
 	let preloader = document.getElementById('cube-loader');
 	container.removeChild(preloader);
 }
@@ -27,50 +27,63 @@ function loadPosts(urlLink) {
 	}).then(response => response.json()).then(processData);
 }
 // обработать массив данных
+
+function cropString(string, len) {
+	if (string.length >= len) {
+		return string.substring(0, len) + " ...";
+	}
+	return string;
+}
+
 function processData(result) {
 	let container = document.querySelector('.row');
 	//for (let item of result) {
 		//renderPost(item, container);
 	//}
 	result.map(function (item) {
-		item["photo"] = "https://via.placeholder.com/300x300.jpg";
-		//renderPost(item, container);
+		item["photo"] = "https://via.placeholder.com/400x300.jpg";
+		item["title"] = cropString(item["title"], 30);
+		item["body"] = cropString(item["body"], 120);
+		renderPost(item, container);
 	});
 	// для демонтрационных целей: анимация изчезает только спустя 3 секунды после прогрузки контента, иначе слишком быстро
 	let timeOutId = setTimeout(stopPreloadAnimation, 3000);
 }
 // создать дом структуру и вставить данные json, затем отрисовать на странице
 function renderPost(data, container) {
-	// элемент контейнера поста
-	let post = document.createElement('div');
-	post.classList.add('post');
-	post.setAttribute('data-id-post', data["id"]);
-	// имя пользователя поста
-	let postUsername = document.createElement('div');
-	postUsername.classList.add('post__username');
-	post.append(postUsername);
-	let usernameP = document.createElement('p');
-	postUsername.append(usernameP);
-	usernameP.innerHTML = "Аноним " + data["userId"] + ":";
-	// контейнер заголовка и текста поста
-	let postColumn = document.createElement('div');
-	postColumn.classList.add('post__column');
-	post.append(postColumn);
-	// заголовок поста
-	let postTitle = document.createElement('div');
-	postTitle.classList.add('post__title');
-	postColumn.append(postTitle);
-	let postTitleP = document.createElement('p');
-	postTitleP.innerHTML = data["title"];
-	postTitle.append(postTitleP);
-	// текст поста
-	let postText = document.createElement('div');
-	postText.classList.add('post__text');
-	postColumn.append(postText);
-	let postTextP = document.createElement('p');
-	postTextP.innerHTML = data["body"];
-	postText.append(postTextP);
-	
-	
-	container.append(post);
+	// колонка
+	let col = document.createElement('div');
+	col.classList.add('col-6', 'col-md-3');
+	// карточка
+	let card = document.createElement('div');
+	card.classList.add('card', 'w-100', 'h-100', 'bg-light', 'border', 'border-3', 'border-success', 'rounded-3');
+	card.setAttribute('data-id-post', data["id"]);
+	col.append(card);
+	// картинка
+	let img = document.createElement('img');
+	img.classList.add('card-img-top', 'img-fluid', 'w-100');
+	img.src = data["photo"];
+	img.alt = "photo";
+	card.append(img);
+	// тело карточки
+	let body = document.createElement('div');
+	body.classList.add('card-body');
+	card.append(body);
+	// заголовок
+	let title = document.createElement('h5');
+	title.classList.add('card-title', 'text-success');
+	title.innerHTML = data["title"];
+	body.append(title);
+	// автор
+	let author = document.createElement('h6');
+	author.classList.add('card-subtitle', 'mb-2', 'text-muted');
+	author.innerHTML = "Аноним " + data["userId"];
+	body.append(author);
+	// текст
+	let text = document.createElement('p');
+	text.classList.add('card-text');
+	text.innerHTML = data["body"];
+	body.append(text);
+
+	container.append(col);
 }
