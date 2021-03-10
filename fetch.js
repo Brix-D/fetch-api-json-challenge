@@ -26,6 +26,9 @@ function getPosts(urlLink) {
 		},
 	}).then(response => response.json()).then( handleData );
 }
+
+
+
 // обработать массив данных
 
 function cropString(string, len) {
@@ -34,6 +37,8 @@ function cropString(string, len) {
 	}
 	return string;
 }
+
+module.exports = cropString;
 
 function handleData(postsJson) {
 	let container = document.querySelector('.row');
