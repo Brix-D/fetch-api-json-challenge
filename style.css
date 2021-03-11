@@ -83,6 +83,10 @@
 /*    text-transform: uppercase;*/
 /*}*/
 
+/*карточки*/
+.text-hidden {
+    display: none;
+}
 
 /*анимация прелоадера*/
 
